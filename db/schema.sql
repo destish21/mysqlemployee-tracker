@@ -1,8 +1,8 @@
 -- create database --
-DROP DATABASE IF EXISTS mysqlemployee-trakerDB;
-CREATE DATABASE mysqlemployee-trakerDB;
+DROP DATABASE IF EXISTS employee_trakerDB;
+CREATE DATABASE employee_trakerDB;
 
-USE myaqlemployee-trakerDB;
+USE employee_trakerDB;
 
 -- DEPARTMENT TABLE ----
 CREATE TABLE department (
