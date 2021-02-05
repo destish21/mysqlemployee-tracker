@@ -8,16 +8,17 @@ const connection = mysql.createConnection({
     port: 3306,
     user: 'root',
     password: '12#root2021',
-    database: 'employee_trakerDB'
+    database: 'employees'
 
 });
 //creating connection using a specific threadId to run startProgram function
 connection.connect(err => {
     if (err) throw err;
     console.log(`connecte to mysql on thread${connection.threadId}`)
-    startPrompt()
+    runPromt()
 });
-const startPrompt = () => {
+
+const runPromt = () => {
     inquirer.prompt([
         {
             name: "choice",
@@ -25,55 +26,55 @@ const startPrompt = () => {
             message: "What would you like to do?",
             choices: [
                 "View All Employees?",
-                "View All Employee\'s By Roles?",
+                "View All Employees By Roles?",
                 "View All Employees By Deparments",
                 "Add Employee?",
                 "Update Employee?",
                 "Add Role?",
                 "Add Department?",
-                "View All Lay off Employee?",
-                "View All Employee Badget?",
+                "View All lay off Employee?",
+                "View All Employee Budget?",
                 "Exit"
 
             ]
         }
     ]).then(answer => {
         switch (answer.choice) {
-            case "View All Employee?":
-                viewAllEmployee();
+            case "View All Employees?":
+                viewAllEmployees();
                 break;
 
-            case "View All Employee's By Roles?":
+            case "View All Employees By Roles?":
                 viewAllRoles();
                 break;
 
-            case "View all Employees By Departmins":
+            case "View all Employees By Departmens?":
                 viewAllDepartments();
                 break;
 
-            case "Add Employee":
+            case "Add Employee?":
                 AddEmployee();
                 break;
 
-            case "Update Employee":
-                UpdateEmployee();
+            case "Update Employee?":
+                updateEmployeeRole();
                 break;
 
-            case "Add Role":
+            case "Add Role?":
                 AddRole();
                 break;
 
-            case "Add Department":
+            case "Add Department?":
                 AddDepartment();
                 break;
 
 
-            case "View All Lay off Employee":
+            case "View All lay off Employee?":
                 fireEmployee();
                 break;
 
-            case "View All Employee Badget":
-                EmployeeBadget();
+            case "View All Employee Budget?":
+                EmployeeBudget();
                 break;
 
             case "Exit":
@@ -85,13 +86,13 @@ const startPrompt = () => {
 
 //case 1. View All Employees?
 const viewAllEmployees = () => {
-    var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.title, role.salary, department.name AS Department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employeeT INNER JOIN  role on role.id = employeeT.role_id INNER JOIN department on department.id = role.department_id left join employeeT e on employeeT.manager_id = e.id;"
+    var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.title, role.salary, department.name AS Department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employeeT INNER JOIN  role on role.id = employeeT.role_id INNER JOIN department on department.id = role.department_id left join employeeT e on employeeT.manager_id = e.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
         console.log('_______________________________________')
         console.table(res);
         console.log('_______________________________________')
-        startPrompt();
+        runPromt();
     })
 }
 
@@ -103,20 +104,85 @@ const viewAllRoles = () => {
         console.log('________________________________________')
         console.table(res);
         console.log('________________________________________')
-        startPrompt();
+        runPromt();
     })
 }
 
 //cas 3. View all Emplyees By Deparments
 const viewAllDepartments = () => {
+//     inquirer.prompt([
+//         {
+//             name:'department',
+//             type: 'input',
+//             message: 'please choose your department',
+//             choices: ["Marketing", "Finance", "Management", "Human Resource", "IT"]
+//         }
+//     ]).then(function(res){
+//         connection.query("SELECT * FROM department?", 
+//         {department: department.id,
+//         department: deparatment.name
+//         },function (err)
+//         {
+//             if (err) throw err;
+//             console.table(val);
+//             runPromt();
+//         })
+//     })
+
+// }
     var query = "SELECT employeeT.first_name, employeeT.last_name, department.name AS Department FROM employeeT JOIN role ON employeeT.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employeeT.id;";
     connection.query(query,
         (err, res) => {
             if (err) throw err;
             console.table(res);
-            startPrompt();
+            runPromt();
         })
 }
+
+//case 4. Add Employee?
+const AddEmployee = () => {
+    inquirer.prompt([
+        {
+            name: "firstname",
+            type: "input",
+            message: "Enter their first name "
+        },
+        {
+            name: "lastname",
+            type: "input",
+            message: "Enter their last name "
+        },
+        {
+            name: "role",
+            type: "list",
+            message: "What is their role? ",
+            choices: selectRole()
+        },
+        {
+            name: "choice",
+            type: "rawlist",
+            message: "Whats their managers name?",
+            choices: selectManager()
+        }
+    ]).then(function (val) {
+        var roleId = selectRole().indexOf(val.role) + 1
+        var managerId = selectManager().indexOf(val.choice) + 1
+        var firstName = val.firstname;
+        var lastName = val.lastname
+        connection.query("INSERT INTO employeeT SET ?",
+            {
+                first_name: firstName,
+                last_name: lastName,
+                manager_id: managerId,
+                role_id: roleId
+            }, (err) => {
+                if (err) throw err;
+                console.table(val);
+                runPromt();
+            })
+    })
+}
+
 
 //case 4. choieces 1
 var roleArr = [];
@@ -195,7 +261,7 @@ const updateEmployeeRole = () => {
                     connection.query("UPDATE employeeT SET role_id=(?) WHERE id=(?)", [roleID, employeeID], function (err3, res3) {
                         if (err3) throw err3;
                         console.log(`${resName.employeeName}'s role is updated to ${resRole.titleRole}.`);
-                        startPrompt();
+                        runPromt();
                     })
                 })
             })
@@ -204,7 +270,7 @@ const updateEmployeeRole = () => {
 }
 
 //case 6. add role
-const addRole = () => {
+const AddRole = () => {
     connection.query("SELECT role.title AS Title, role.salary AS Salary FROM role", (err, res) => {
         inquirer.prompt([
             {
@@ -227,7 +293,7 @@ const addRole = () => {
                 function (err) {
                     if (err) throw err
                     console.table(res);
-                    startPrompt();
+                    runPromt();
                 }
             )
         });
@@ -235,7 +301,7 @@ const addRole = () => {
 }
 
 //case 7. adding department
-const addDepartment = () => {
+const AddDepartment = () => {
     inquirer.prompt([
         {
             name: "name",
@@ -250,7 +316,7 @@ const addDepartment = () => {
             function (err) {
                 if (err) throw err
                 console.table(res);
-                startPrompt();
+                runPromt();
             }
         )
     })
@@ -275,15 +341,14 @@ const fireEmployee = () => {
         ).then(function (answer) {
             connection.query("DELETE FROM employeeT WHERE first_name= ?", answer.employeeName)
             console.log("\n" + answer.employeeName + " is successfuly fired!\n")
-
-            startPrompt();
+            runPromt();
         })
     })
 
 }
 
 //case 9. employee budget
-const employeeBuget = () => {
+const EmployeeBudget = () => {
     inquirer.prompt(
         {
             name: "budget",
@@ -291,7 +356,7 @@ const employeeBuget = () => {
             message: "Do you want to know employee budget? (y/n)"
         }
     ).then(function (yes) {
-        if (!yes.budget) return startPrompt();
+        if (!yes.budget) return runPromt();
         ;
         console.log('\nCompany Employee and theier salary')
         console.log('----------------------------------')
@@ -312,11 +377,11 @@ const employeeBuget = () => {
             console.log('-------------------------------')
             console.log("Employees Total Budget = " + totalBuget)
             console.log('\n')
-            startPrompt();
+            runPromt();
         })
     })
 }
-const exitTracker =()=> {
+const exitTracker = () => {
     connection.end();
 }
 
