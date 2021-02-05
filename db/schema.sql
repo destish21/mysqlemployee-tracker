@@ -1,8 +1,8 @@
 -- create database --
-DROP DATABASE IF EXISTS employee_trakerDB;
-CREATE DATABASE employee_trakerDB;
+DROP DATABASE IF EXISTS employees;
+CREATE DATABASE employees;
 
-USE employee_trakerDB;
+USE employees;
 
 -- DEPARTMENT TABLE ----
 CREATE TABLE department (
@@ -24,5 +24,5 @@ CREATE TABLE employeeT (
   first_name VARCHAR(30),
   last_name VARCHAR(30),
   manager_id INT,
-  role_id INT,
+  role_id INT
 );
