@@ -14,30 +14,32 @@ const connection = mysql.createConnection({
 //creating connection using a specific threadId to run startProgram function
 connection.connect(err => {
     if (err) throw err;
-    console.log(`connecte to mysql on thread${connection.threadId}`)
+    console.log(`connected to mysql on thread${connection.threadId}`)
     runPromt()
 });
+const options = [
+    "View All Employees?",
+    "View All Employees By Roles?",
+    "View All Department?",
+    "View all Employees By Departmens?",
+    "Add Employee?",
+    "Update Employee?",
+    "Add Role?",
+    "Add Department?",
+    "View All Removed Employee?",
+    "View All Employee Budget?",
+    "Exit"
 
+]
 const runPromt = () => {
     inquirer.prompt([
         {
             name: "choice",
             type: "list",
             message: "What would you like to do?",
-            choices: [
-                "View All Employees?",
-                "View All Employees By Roles?",
-                "View All Employees By Deparments",
-                "Add Employee?",
-                "Update Employee?",
-                "Add Role?",
-                "Add Department?",
-                "View All lay off Employee?",
-                "View All Employee Budget?",
-                "Exit"
-
-            ]
+            choices: options
         }
+
     ]).then(answer => {
         switch (answer.choice) {
             case "View All Employees?":
@@ -47,9 +49,12 @@ const runPromt = () => {
             case "View All Employees By Roles?":
                 viewAllRoles();
                 break;
+            case "View All Department?":
+                viewAllDepartment();
+                break;
 
             case "View all Employees By Departmens?":
-                viewAllDepartments();
+                viewEByDepartments();
                 break;
 
             case "Add Employee?":
@@ -69,8 +74,8 @@ const runPromt = () => {
                 break;
 
 
-            case "View All lay off Employee?":
-                fireEmployee();
+            case "View All Removed Employee?":
+                removedEmployee();
                 break;
 
             case "View All Employee Budget?":
@@ -108,28 +113,17 @@ const viewAllRoles = () => {
     })
 }
 
-//cas 3. View all Emplyees By Deparments
-const viewAllDepartments = () => {
-//     inquirer.prompt([
-//         {
-//             name:'department',
-//             type: 'input',
-//             message: 'please choose your department',
-//             choices: ["Marketing", "Finance", "Management", "Human Resource", "IT"]
-//         }
-//     ]).then(function(res){
-//         connection.query("SELECT * FROM department?", 
-//         {department: department.id,
-//         department: deparatment.name
-//         },function (err)
-//         {
-//             if (err) throw err;
-//             console.table(val);
-//             runPromt();
-//         })
-//     })
+const viewAllDepartment = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        console.table(res);
+        runPromt();
 
-// }
+    })
+
+}
+
+//cas 3. View all Emplyees By Deparments
+const viewEByDepartments = () => {
     var query = "SELECT employeeT.first_name, employeeT.last_name, department.name AS Department FROM employeeT JOIN role ON employeeT.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employeeT.id;";
     connection.query(query,
         (err, res) => {
@@ -159,14 +153,14 @@ const AddEmployee = () => {
             choices: selectRole()
         },
         {
-            name: "choice",
+            name: "manager",
             type: "rawlist",
             message: "Whats their managers name?",
             choices: selectManager()
         }
-    ]).then(function (val) {
+    ]).then(val => {
         var roleId = selectRole().indexOf(val.role) + 1
-        var managerId = selectManager().indexOf(val.choice) + 1
+        var managerId = selectManager().indexOf(val.manager) + 1
         var firstName = val.firstname;
         var lastName = val.lastname
         connection.query("INSERT INTO employeeT SET ?",
@@ -229,10 +223,10 @@ const updateEmployeeRole = () => {
                 message: "Name of employee to update?",
                 choices: employeeNaneArr
             }]
-        ).then(function (resName) {
+        ).then(resName => {
             // if a name to update is selected then; 
             //collect role titles from the query to be used as an araray choices for role prompt
-            connection.query("SELECT r.title, r.id FROM role AS r", function (err, resR) {
+            connection.query("SELECT r.title, r.id FROM role AS r", (err, resR) => {
                 if (err) throw err;
                 var roleTitlesArr = [];
                 for (var i = 0; i < resR.length; i++) {
@@ -245,7 +239,7 @@ const updateEmployeeRole = () => {
                         message: "Select the new role!",
                         choices: roleTitlesArr
                     }]
-                ).then(function (resRole) {
+                ).then(resRole => {
                     //for each response  asign the preupdated employee id to that particular person updated.
                     resN.forEach(person => {
                         if (resName.employeeName === person.full_Name) {
@@ -258,7 +252,7 @@ const updateEmployeeRole = () => {
                             roleID = position.id;
                         }
                     })
-                    connection.query("UPDATE employeeT SET role_id=(?) WHERE id=(?)", [roleID, employeeID], function (err3, res3) {
+                    connection.query("UPDATE employeeT SET role_id=(?) WHERE id=(?)", [roleID, employeeID], (err3, res3) => {
                         if (err3) throw err3;
                         console.log(`${resName.employeeName}'s role is updated to ${resRole.titleRole}.`);
                         runPromt();
@@ -283,14 +277,14 @@ const AddRole = () => {
                 type: "input",
                 message: "What is the Salary?"
             }
-        ]).then(function (res) {
+        ]).then(res => {
             connection.query(
                 "INSERT INTO role SET ?",
                 {
                     title: res.Title,
                     salary: res.Salary,
                 },
-                function (err) {
+                err => {
                     if (err) throw err
                     console.table(res);
                     runPromt();
@@ -308,12 +302,12 @@ const AddDepartment = () => {
             type: "input",
             message: "What Department would you like to add?"
         }
-    ]).then(function (res) {
+    ]).then(res => {
         connection.query("INSERT INTO department SET ? ",
             {
                 name: res.name
             },
-            function (err) {
+            err => {
                 if (err) throw err
                 console.table(res);
                 runPromt();
@@ -323,7 +317,7 @@ const AddDepartment = () => {
 }
 
 //case 8. deleting employee
-const fireEmployee = () => {
+const removedEmployee = () => {
     connection.query("SELECT * FROM employeeT", (err, resId) => {
         var array = [];
         for (let index = 0; index < resId.length; index++) {
@@ -338,9 +332,9 @@ const fireEmployee = () => {
                 message: "Enter employee's id to be deleted?",
                 choices: array
             }
-        ).then(function (answer) {
+        ).then(answer => {
             connection.query("DELETE FROM employeeT WHERE first_name= ?", answer.employeeName)
-            console.log("\n" + answer.employeeName + " is successfuly fired!\n")
+            console.log("\n" + answer.employeeName + " is successfuly removed!\n")
             runPromt();
         })
     })
@@ -355,13 +349,13 @@ const EmployeeBudget = () => {
             type: "confirm",
             message: "Do you want to know employee budget? (y/n)"
         }
-    ).then(function (yes) {
+    ).then(yes => {
         if (!yes.budget) return runPromt();
         ;
         console.log('\nCompany Employee and theier salary')
         console.log('----------------------------------')
         var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.salary FROM employeeT INNER JOIN  role on role.id = employeeT.role_id left join employeeT e on employeeT.manager_id = e.id;"
-        connection.query(query, function (err, res) {
+        connection.query(query, (err, res) => {
             if (err) throw err;
             console.table(res);
             //get another connection
