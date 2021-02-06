@@ -7,6 +7,10 @@
   
    # Table of Contents
 
+   * [Description](#Description)
+
+   * [Runing a command-line application ](#Runing-a-command-line-application) 
+
    * [Installation Instructions](#installation-instructions)
   
    * [Usage Instructions](#usage-instructions)
@@ -30,7 +34,7 @@
 
    * Update employee roles
 
-   # by using a command-line application to generate one. 
+   #  Runing a command-line application 
 
    * You can Update employee managers.
    * You can View employees by manager.
@@ -57,9 +61,12 @@
    * you can run by node index.js to mysqlemployee-tracker.
 
    # screenshot Images
-   * ![mysqlemployee-tracker](./public/assets/Images/notetakerhome.png)
+   * ![mysqlemployee-tracker](./Images/ETracker.png)
   
-   * ![mysqlemployee-tracker](./public/assets/Images/notetaker1.png)
+   * ![mysqlemployee-tracker](./Images/Erole.png)
+
+   * ![mysqlemployee-tracker](./Images/EDepartment.png)
+
 
    ## Usage Instructions
 
@@ -107,7 +114,7 @@
 
    * Test Screenshot image 
  
-   ![mysqlemployee-tracker](./Develop/Images/test1.png)
+   ![mysqlemployee-tracker](./Images/prompt.png)
   
    ### Click the  links to wach video 1 and video 2 demonstration:  
 
