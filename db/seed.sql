@@ -1,67 +1,44 @@
--- DEPARTMENT SEEDS -----
-INSERT INTO department (name)
-VALUE ("Marketing");
+USE employees;
+INSERT INTO
+  department (name) 
+  VALUE 
+  ("Marketing"),
+  ("Finance"),
+  ("Management"),
+  ("Human Resource"),
+  ("IT");
+INSERT INTO
+  role (title, salary, department_id) 
+  VALUE 
+  ("Lead Engineer", 160000, 5),
+  ("Technical Program Manager", 160000, 3),
+  ("Software Engineer", 130000, 5),
+  ("Accountant manager", 130000, 2),
+  ("Senior Software Engineer", 1900000, 5),
+  ("Salesperson", 90000, 1),
+  ("Sales Manager", 130000, 3),
+  ("Recruiter", 200000, 4);
+  
+INSERT INTO
+employeeT (first_name, last_name, manager_id, role_id) 
+VALUE 
+("Elaine", "Anderson", null,  1),
+("Jerry", "William", null,  2),
+("John", "Richard", null,  3),
+("Michael", "Jordan", 1, 4),
+("Sarah", "Donald", 4, 5),
+("Elizabeth", "Baker", 1, 6),
+("Kramer", "Mark", 2, 7);
 
-INSERT INTO department (name)
-VALUE ("Finance");
-
-INSERT INTO department (name)
-VALUE ("Management");
-
-INSERT INTO department (name)
-VALUE ("Human Resource");
-
-INSERT INTO department (name)
-VALUE ("IT");
-------------------------------------------------
--- EMPLOYEE ROLE SEEDS -------
-INSERT INTO role (title, salary, department_id)
-VALUE ("Lead Engineer", 150000, 5);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Technical Program Manager", 150000, 3);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Software Engineer", 120000, 5);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Accountant manager", 120000, 2);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Senior Software Engineer", 1800000, 5);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Salesperson", 80000, 1);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Sales Manager", 120000, 3);
-
-INSERT INTO role (title, salary, department_id)
-VALUE ("Recruiter", 190000, 4);
-
--- EMPLOYEE SEEDS -------
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("Jack", "Anderson", null, 1);
-
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("Mary", "William", null, 2);
-
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("John","Richard",null,3);
-
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("Denis", "Taylor", 1, 4);
-
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("Sarah", "Donald", 4, 5);
-
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("Elizabeth", "Baker", 1, 6);
-
-INSERT INTO employeeT (first_name, last_name, manager_id, role_id)
-VALUE ("David", "Mark", 2, 7);
-
--- SELECTING all from the three tables 
 SELECT * FROM department;
 SELECT * FROM role;
-SELECT * FROM employee;
+SELECT * FROM employeeT;
+
+-- SELECT e.*, CONCAT( m.first_name, '' , m.last_name) AS manager FROM employee AS e 
+-- LEFT JOIN emploee AS m ON e.manager_id;
+SELECT department.id, department.name FROM department ORDER BY department.id;
+SELECT department.name AS department, role.title, employee.id, employee.first_name, employee.last_name
+    FROM employee
+    LEFT JOIN role ON (role.id = employee.role_id)
+    LEFT JOIN department ON (department.id = role.department_id)
+    ORDER BY department.name;
