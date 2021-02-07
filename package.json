@@ -1,7 +1,7 @@
 {
   "name": "mysqlemployee-tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "This package is need to run the app and Manage a company's employees using node, inquirer, and MySQL",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
