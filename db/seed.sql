@@ -13,10 +13,11 @@ INSERT INTO
   ("Lead Engineer", 160000, 5),
   ("Technical Program Manager", 160000, 3),
   ("Software Engineer", 130000, 5),
-  ("Accountant manager", 130000, 2),
+  ("Account manager", 130000, 2),
+  ("Accountant", 12000, 2),
   ("Senior Software Engineer", 1900000, 5),
   ("Salesperson", 90000, 1),
-  ("Sales Manager", 130000, 3),
+  ("Manager", 130000, 3),
   ("Recruiter", 200000, 4);
   
 INSERT INTO
@@ -27,12 +28,16 @@ VALUE
 ("John", "Richard", null,  3),
 ("Michael", "Jordan", 1, 4),
 ("Sarah", "Donald", 4, 5),
-("Elizabeth", "Baker", 1, 6),
-("Kramer", "Mark", 2, 7);
+("Andries", "Baker", 1, 6),
+("Kramer", "Mark", 2, 7),
+("Larry", "Dariwine",3 , 8),
+("George", "Washington", 5, 9);
 
 SELECT * FROM department;
 SELECT * FROM role;
 SELECT * FROM employeeT;
+
+-- SELECT * FROM emploeeT.manager
 
 -- SELECT e.*, CONCAT( m.first_name, '' , m.last_name) AS manager FROM employee AS e 
 -- LEFT JOIN emploee AS m ON e.manager_id;
