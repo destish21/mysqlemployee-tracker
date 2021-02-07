@@ -17,20 +17,21 @@ connection.connect(err => {
     console.log(`connected to mysql on thread${connection.threadId}`)
     runPromt()
 });
+
 const options = [
-    "View All Employees?",
-    "View All Employees By Roles?",
+    "View All employees?",
+    "View All employees By Roles?",
     "View All Department?",
-    "View all Employees By Departmens?",
+    "View all employees By Departmens?",
     "Add Employee?",
     "Update Employee?",
     "Add Role?",
     "Add Department?",
-    "View All Removed Employee?",
+    "Remove Employee?",
     "View All Employee Budget?",
     "Exit"
-
 ]
+
 const runPromt = () => {
     inquirer.prompt([
         {
@@ -42,18 +43,19 @@ const runPromt = () => {
 
     ]).then(answer => {
         switch (answer.choice) {
-            case "View All Employees?":
-                viewAllEmployees();
+            case "View All employees?":
+                viewAllemployees();
                 break;
 
-            case "View All Employees By Roles?":
+            case "View All employees By Roles?":
                 viewAllRoles();
                 break;
+
             case "View All Department?":
                 viewAllDepartment();
                 break;
 
-            case "View all Employees By Departmens?":
+            case "View all employees By Departmens?":
                 viewEByDepartments();
                 break;
 
@@ -74,7 +76,7 @@ const runPromt = () => {
                 break;
 
 
-            case "View All Removed Employee?":
+            case "Remove Employee?":
                 removedEmployee();
                 break;
 
@@ -89,14 +91,14 @@ const runPromt = () => {
     })
 }
 
-//case 1. View All Employees?
-const viewAllEmployees = () => {
+//case 1. View All employees?
+const viewAllemployees = () => {
     var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.title, role.salary, department.name AS Department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employeeT INNER JOIN  role on role.id = employeeT.role_id INNER JOIN department on department.id = role.department_id left join employeeT e on employeeT.manager_id = e.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log('_______________________________________')
+        console.log('_________________________________________________________________________________________')
         console.table(res);
-        console.log('_______________________________________')
+        console.log('_________________________________________________________________________________________')
         runPromt();
     })
 }
@@ -106,16 +108,20 @@ const viewAllRoles = () => {
     var query = "SELECT employeeT.first_name, employeeT.last_name, role.title AS Title FROM employeeT JOIN role ON employeeT.role_id = role.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log('________________________________________')
+        console.log('__________________________________________________')
         console.table(res);
-        console.log('________________________________________')
+        console.log('__________________________________________________')
         runPromt();
     })
 }
 
+
+
 const viewAllDepartment = () => {
     connection.query('SELECT * FROM department', (err, res) => {
+        console.log('____________________________')
         console.table(res);
+        console.log('__________________________')
         runPromt();
 
     })
@@ -128,7 +134,10 @@ const viewEByDepartments = () => {
     connection.query(query,
         (err, res) => {
             if (err) throw err;
+            console.log('_______________________________________________')
             console.table(res);
+            console.log('_______________________________________________')
+
             runPromt();
         })
 }
@@ -155,7 +164,7 @@ const AddEmployee = () => {
         {
             name: "manager",
             type: "rawlist",
-            message: "Whats their managers name?",
+            message: "Manager's name?",
             choices: selectManager()
         }
     ]).then(val => {
@@ -171,12 +180,15 @@ const AddEmployee = () => {
                 role_id: roleId
             }, (err) => {
                 if (err) throw err;
+                console.log('__________________________________________________')
+
                 console.table(val);
+                console.log('__________________________________________________')
+
                 runPromt();
             })
     })
 }
-
 
 //case 4. choieces 1
 var roleArr = [];
@@ -286,7 +298,10 @@ const AddRole = () => {
                 },
                 err => {
                     if (err) throw err
+                    console.log('__________________________________________________')
                     console.table(res);
+                    console.log('__________________________________________________')
+
                     runPromt();
                 }
             )
@@ -309,7 +324,11 @@ const AddDepartment = () => {
             },
             err => {
                 if (err) throw err
+                console.log('__________________________________________________')
+
                 console.table(res);
+                console.log('__________________________________________________')
+
                 runPromt();
             }
         )
@@ -321,7 +340,7 @@ const removedEmployee = () => {
     connection.query("SELECT * FROM employeeT", (err, resId) => {
         var array = [];
         for (let index = 0; index < resId.length; index++) {
-            const element = resId[index].first_name;
+            const element = resId[index].first_name + ' ' + resId[index].last_name;
             array.push(element)
         }
         //console.log(array)
@@ -357,7 +376,11 @@ const EmployeeBudget = () => {
         var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.salary FROM employeeT INNER JOIN  role on role.id = employeeT.role_id left join employeeT e on employeeT.manager_id = e.id;"
         connection.query(query, (err, res) => {
             if (err) throw err;
+            console.log('__________________________________________________')
+
             console.table(res);
+            console.log('__________________________________________________')
+
             //get another connection
             var salaryArr = [];
             for (let index = 0; index < res.length; index++) {
@@ -369,7 +392,7 @@ const EmployeeBudget = () => {
                 totalBuget += parseInt(salaryArr[i]);
             }
             console.log('-------------------------------')
-            console.log("Employees Total Budget = " + totalBuget)
+            console.log("employees Total Budget = " + totalBuget)
             console.log('\n')
             runPromt();
         })
