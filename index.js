@@ -9,8 +9,8 @@ const connection = mysql.createConnection({
     user: 'root',
     password: '12#root2021',
     database: 'employees'
-
 });
+
 //creating connection using a specific threadId to run startProgram function
 connection.connect(err => {
     if (err) throw err;
@@ -21,6 +21,7 @@ connection.connect(err => {
 const options = [
     "View All employees?",
     "View All employees By Roles?",
+    "View All Managers?",
     "View All Department?",
     "View all employees By Departmens?",
     "Add Employee?",
@@ -50,6 +51,11 @@ const runPromt = () => {
             case "View All employees By Roles?":
                 viewAllRoles();
                 break;
+
+            case "View All Managers?":
+                    viewAllManagers();
+                    break;
+
 
             case "View All Department?":
                 viewAllDepartment();
@@ -96,9 +102,9 @@ const viewAllemployees = () => {
     var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.title, role.salary, department.name AS Department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employeeT INNER JOIN  role on role.id = employeeT.role_id INNER JOIN department on department.id = role.department_id left join employeeT e on employeeT.manager_id = e.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log('_________________________________________________________________________________________')
+        console.log('_______________________________________________________________________________________________')
         console.table(res);
-        console.log('_________________________________________________________________________________________')
+        console.log('_______________________________________________________________________________________________')
         runPromt();
     })
 }
@@ -108,24 +114,33 @@ const viewAllRoles = () => {
     var query = "SELECT employeeT.first_name, employeeT.last_name, role.title AS Title FROM employeeT JOIN role ON employeeT.role_id = role.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log('__________________________________________________')
+        console.log('_______________________________________________')
         console.table(res);
-        console.log('__________________________________________________')
+        console.log('_______________________________________________')
         runPromt();
     })
 }
 
-
-
-const viewAllDepartment = () => {
-    connection.query('SELECT * FROM department', (err, res) => {
-        console.log('____________________________')
+const viewAllManagers = () => {
+    connection.query('SELECT * FROM employeeT WHERE manager_id IS NULL', (err, res) => {
+        if (err) throw err;
+        console.log('_________________________________________________')
         console.table(res);
-        console.log('__________________________')
+        console.log('_________________________________________________')
+
         runPromt();
 
     })
+}
 
+const viewAllDepartment = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        console.log('___________________')
+        console.table(res);
+        console.log('____________________')
+        runPromt();
+
+    })
 }
 
 //cas 3. View all Emplyees By Deparments
@@ -134,12 +149,12 @@ const viewEByDepartments = () => {
     connection.query(query,
         (err, res) => {
             if (err) throw err;
-            console.log('_______________________________________________')
+            console.log('__________________________________________________________')
             console.table(res);
-            console.log('_______________________________________________')
+            console.log('__________________________________________________________')
 
             runPromt();
-        })
+       })
 }
 
 //case 4. Add Employee?
@@ -372,14 +387,13 @@ const EmployeeBudget = () => {
         if (!yes.budget) return runPromt();
         ;
         console.log('\nCompany Employee and theier salary')
-        console.log('----------------------------------')
+        console.log('--------------------------------------')
         var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.salary FROM employeeT INNER JOIN  role on role.id = employeeT.role_id left join employeeT e on employeeT.manager_id = e.id;"
         connection.query(query, (err, res) => {
             if (err) throw err;
-            console.log('__________________________________________________')
-
+            console.log('___________________________________')
             console.table(res);
-            console.log('__________________________________________________')
+            console.log('____________________________________')
 
             //get another connection
             var salaryArr = [];
@@ -391,7 +405,7 @@ const EmployeeBudget = () => {
             for (var i = 0; i < salaryArr.length; i++) {
                 totalBuget += parseInt(salaryArr[i]);
             }
-            console.log('-------------------------------')
+            console.log('--------------------------------')
             console.log("employees Total Budget = " + totalBuget)
             console.log('\n')
             runPromt();
