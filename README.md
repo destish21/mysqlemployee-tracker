@@ -62,9 +62,11 @@
 
    # screenshot Images
    * ![mysqlemployee-tracker](./Images/ETracker.png)
-  
+
    * ![mysqlemployee-tracker](./Images/ERole.png)
 
+   * ![mysqlemployee-tracker](./Images/ERole&AllManagers.png)
+   
    * ![mysqlemployee-tracker](./Images/EDepartment.png)
 
 
