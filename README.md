@@ -129,7 +129,7 @@
  
    ![mysqlemployee-tracker](./Images/prompt.png)
   
-   ### Click the  links to wach video 1 and video 2 demonstration:  
+   ### Click the  links to wach video  demonstration:  
 
    * [Watch the video ](https://drive.google.com/file/d/1rgVSVhG-DRQTNpzqhZfX6vCmG51VK1-P/view?usp=sharing)
   

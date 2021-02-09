@@ -34,7 +34,7 @@ const options = [
     "View All Department?",
     "View all employees By Departmens?",
     "Add Employee?",
-    "Update Employee?",
+    "Update Employees Role?",
     "Add Role?",
     "Add Department?",
     "Remove Employee?",
@@ -77,7 +77,7 @@ const runPromt = () => {
                 AddEmployee();
                 break;
 
-            case "Update Employee?":
+            case "Update Employees Role?":
                 updateEmployeeRole();
                 break;
 
@@ -200,7 +200,7 @@ const AddEmployee = () => {
                 last_name: lastName,
                 manager_id: managerId,
                 role_id: roleId
-            }, (err) => {
+            }, err => {
                 if (err) throw err;
                 console.log(chalk.yellow.bold(`=========================================`));
                 console.table(val);
@@ -212,7 +212,7 @@ const AddEmployee = () => {
 
 //case 6.1 choieces 1
 var roleArr = [];
-selectRole = () => {
+const selectRole = () => {
     connection.query("SELECT * FROM role", (err, res) => {
         if (err) throw err
         for (var i = 0; i < res.length; i++) {
@@ -224,7 +224,7 @@ selectRole = () => {
 
 //case 6.2 choice 2
 var managersArr = [];
-selectManager = () => {
+const selectManager = () => {
     connection.query("SELECT first_name, last_name FROM employeeT WHERE manager_id IS NULL", (err, res) => {
         if (err) throw err
         for (var i = 0; i < res.length; i++) {
@@ -234,7 +234,7 @@ selectManager = () => {
     return managersArr;
 }
 
-//case 7 Update employee
+//case 7 Update Employees Role
 const updateEmployeeRole = () => {
     var query1 = (
         "SELECT e.first_name, e.last_name, e.id," +
@@ -353,12 +353,13 @@ const AddDepartment = () => {
     })
 }
 
-//case 10 deleting employee
+
+//case 10 removing employee
 const removedEmployee = () => {
     connection.query("SELECT * FROM employeeT", (err, resId) => {
         var array = [];
         for (let index = 0; index < resId.length; index++) {
-            const element = resId[index].first_name + ' ' + resId[index].last_name;
+            const element = resId[index].first_name; //+ ' ' + resId[index].last_name;
             array.push(element)
         }
         //console.log(array)

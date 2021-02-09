@@ -41,9 +41,9 @@ SELECT * FROM employeeT;
 
 -- SELECT e.*, CONCAT( m.first_name, '' , m.last_name) AS manager FROM employee AS e 
 -- LEFT JOIN emploee AS m ON e.manager_id;
-SELECT department.id, department.name FROM department ORDER BY department.id;
-SELECT department.name AS department, role.title, employee.id, employee.first_name, employee.last_name
-    FROM employee
-    LEFT JOIN role ON (role.id = employee.role_id)
-    LEFT JOIN department ON (department.id = role.department_id)
-    ORDER BY department.name;
+-- SELECT department.id, department.name FROM department ORDER BY department.id;
+-- SELECT department.name AS department, role.title, employee.id, employee.first_name, employee.last_name
+--     FROM employee
+--     LEFT JOIN role ON (role.id = employee.role_id)
+--     LEFT JOIN department ON (department.id = role.department_id)
+--     ORDER BY department.name;
