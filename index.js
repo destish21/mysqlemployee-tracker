@@ -1,5 +1,7 @@
 const inquirer = require('inquirer')
 const mysql = require('mysql')
+const chalk = require('chalk');
+var figlet = require('figlet');
 const myTable = require('console.table');
 
 // Creating a connection between database and localhost using port 3306
@@ -11,13 +13,20 @@ const connection = mysql.createConnection({
     database: 'employees'
 });
 
-//creating connection using a specific threadId to run startProgram function
+//creating connection using a specific threadId to run my  function Referenc from google stackflow.
 connection.connect(err => {
     if (err) throw err;
+    console.log(chalk.yellow.bold(`==============================================================================================================`));
+    console.log(``);
+    console.log(chalk.greenBright.bold(figlet.textSync('MysqlEmployee-Tracker')));
+    console.log(``);
+    console.log(` ` + chalk.greenBright.bold('Created By: Desta Mulualem'));
+    console.log(``);
+    console.log(chalk.yellow.bold(`===============================================================================================================`));
     console.log(`connected to mysql on thread${connection.threadId}`)
     runPromt()
 });
-
+// All options easy to modify 
 const options = [
     "View All employees?",
     "View All employees By Roles?",
@@ -53,9 +62,8 @@ const runPromt = () => {
                 break;
 
             case "View All Managers?":
-                    viewAllManagers();
-                    break;
-
+                viewAllManagers();
+                break;
 
             case "View All Department?":
                 viewAllDepartment();
@@ -81,7 +89,6 @@ const runPromt = () => {
                 AddDepartment();
                 break;
 
-
             case "Remove Employee?":
                 removedEmployee();
                 break;
@@ -97,67 +104,67 @@ const runPromt = () => {
     })
 }
 
-//case 1. View All employees?
+//case 1 View All employees?
 const viewAllemployees = () => {
     var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.title, role.salary, department.name AS Department, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employeeT INNER JOIN  role on role.id = employeeT.role_id INNER JOIN department on department.id = role.department_id left join employeeT e on employeeT.manager_id = e.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log('_______________________________________________________________________________________________')
+        console.log(chalk.yellow.bold(`===============================================================================================`));
         console.table(res);
-        console.log('_______________________________________________________________________________________________')
+        console.log(chalk.yellow.bold(`==============================================================================================`));
         runPromt();
     })
 }
 
-//case 2. View All Employee's By Roles?
+//case 2 View All Employee's By Roles?
 const viewAllRoles = () => {
     var query = "SELECT employeeT.first_name, employeeT.last_name, role.title AS Title FROM employeeT JOIN role ON employeeT.role_id = role.id;";
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log('_______________________________________________')
+        console.log(chalk.yellow.bold(`==========================================================`));
         console.table(res);
-        console.log('_______________________________________________')
+        console.log(chalk.yellow.bold(`=================================================`));
         runPromt();
     })
 }
 
+//case 3 View All Managers?
 const viewAllManagers = () => {
     connection.query('SELECT * FROM employeeT WHERE manager_id IS NULL', (err, res) => {
         if (err) throw err;
-        console.log('_________________________________________________')
+        console.log(chalk.yellow.bold(`===============================================`));
         console.table(res);
-        console.log('_________________________________________________')
-
+        console.log(chalk.yellow.bold(`==============================================`));
         runPromt();
 
     })
 }
 
+//case 4.1 View All Departments?
 const viewAllDepartment = () => {
     connection.query('SELECT * FROM department', (err, res) => {
-        console.log('___________________')
+        console.log(chalk.yellow.bold(`==================================================`));
         console.table(res);
-        console.log('____________________')
+        console.log(chalk.yellow.bold(`====================`));
         runPromt();
 
     })
 }
 
-//cas 3. View all Emplyees By Deparments
+//cas 4.2 View all Emplyees By Deparments
 const viewEByDepartments = () => {
     var query = "SELECT employeeT.first_name, employeeT.last_name, department.name AS Department FROM employeeT JOIN role ON employeeT.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employeeT.id;";
     connection.query(query,
         (err, res) => {
             if (err) throw err;
-            console.log('__________________________________________________________')
+            console.log(chalk.yellow.bold(`==============================================================`));
             console.table(res);
-            console.log('__________________________________________________________')
-
+            console.log(chalk.yellow.bold(`===========================================================`));
             runPromt();
-       })
+        })
 }
 
-//case 4. Add Employee?
+//case 5 Add Employee?
 const AddEmployee = () => {
     inquirer.prompt([
         {
@@ -195,17 +202,15 @@ const AddEmployee = () => {
                 role_id: roleId
             }, (err) => {
                 if (err) throw err;
-                console.log('__________________________________________________')
-
+                console.log(chalk.yellow.bold(`=========================================`));
                 console.table(val);
-                console.log('__________________________________________________')
-
+                console.log(chalk.yellow.bold(`=========================================`));
                 runPromt();
             })
     })
 }
 
-//case 4. choieces 1
+//case 6.1 choieces 1
 var roleArr = [];
 selectRole = () => {
     connection.query("SELECT * FROM role", (err, res) => {
@@ -217,7 +222,7 @@ selectRole = () => {
     return roleArr;
 }
 
-//case 4. choice 2
+//case 6.2 choice 2
 var managersArr = [];
 selectManager = () => {
     connection.query("SELECT first_name, last_name FROM employeeT WHERE manager_id IS NULL", (err, res) => {
@@ -229,7 +234,7 @@ selectManager = () => {
     return managersArr;
 }
 
-//case 5. Update employee
+//case 7 Update employee
 const updateEmployeeRole = () => {
     var query1 = (
         "SELECT e.first_name, e.last_name, e.id," +
@@ -282,6 +287,7 @@ const updateEmployeeRole = () => {
                     connection.query("UPDATE employeeT SET role_id=(?) WHERE id=(?)", [roleID, employeeID], (err3, res3) => {
                         if (err3) throw err3;
                         console.log(`${resName.employeeName}'s role is updated to ${resRole.titleRole}.`);
+                        console.log(chalk.yellow.bold(`=========================================`));
                         runPromt();
                     })
                 })
@@ -290,7 +296,7 @@ const updateEmployeeRole = () => {
     })
 }
 
-//case 6. add role
+//case 8 add role
 const AddRole = () => {
     connection.query("SELECT role.title AS Title, role.salary AS Salary FROM role", (err, res) => {
         inquirer.prompt([
@@ -313,10 +319,9 @@ const AddRole = () => {
                 },
                 err => {
                     if (err) throw err
-                    console.log('__________________________________________________')
+                    console.log(chalk.yellow.bold(`=========================================`));
                     console.table(res);
-                    console.log('__________________________________________________')
-
+                    console.log(chalk.yellow.bold(`=========================================`));
                     runPromt();
                 }
             )
@@ -324,7 +329,7 @@ const AddRole = () => {
     });
 }
 
-//case 7. adding department
+//case 9 adding department
 const AddDepartment = () => {
     inquirer.prompt([
         {
@@ -339,18 +344,16 @@ const AddDepartment = () => {
             },
             err => {
                 if (err) throw err
-                console.log('__________________________________________________')
-
+                console.log(chalk.yellow.bold(`========================`));
                 console.table(res);
-                console.log('__________________________________________________')
-
+                console.log(chalk.yellow.bold(`=========================`));
                 runPromt();
             }
         )
     })
 }
 
-//case 8. deleting employee
+//case 10 deleting employee
 const removedEmployee = () => {
     connection.query("SELECT * FROM employeeT", (err, resId) => {
         var array = [];
@@ -369,13 +372,15 @@ const removedEmployee = () => {
         ).then(answer => {
             connection.query("DELETE FROM employeeT WHERE first_name= ?", answer.employeeName)
             console.log("\n" + answer.employeeName + " is successfuly removed!\n")
+            console.log(chalk.red.bold(`======================================`));
             runPromt();
+
         })
     })
 
 }
 
-//case 9. employee budget
+//case 11 employee budget
 const EmployeeBudget = () => {
     inquirer.prompt(
         {
@@ -387,14 +392,13 @@ const EmployeeBudget = () => {
         if (!yes.budget) return runPromt();
         ;
         console.log('\nCompany Employee and theier salary')
-        console.log('--------------------------------------')
+        console.log(chalk.green.bold('-----------------------------------'));
         var query = "SELECT employeeT.id, employeeT.first_name, employeeT.last_name, role.salary FROM employeeT INNER JOIN  role on role.id = employeeT.role_id left join employeeT e on employeeT.manager_id = e.id;"
         connection.query(query, (err, res) => {
             if (err) throw err;
-            console.log('___________________________________')
+            console.log(chalk.yellow.bold(`=================================`));
             console.table(res);
-            console.log('____________________________________')
-
+            console.log(chalk.yellow.bold(`===================================`));
             //get another connection
             var salaryArr = [];
             for (let index = 0; index < res.length; index++) {
@@ -405,9 +409,11 @@ const EmployeeBudget = () => {
             for (var i = 0; i < salaryArr.length; i++) {
                 totalBuget += parseInt(salaryArr[i]);
             }
-            console.log('--------------------------------')
+            console.log(chalk.green.bold(`---------------------------------`));
             console.log("employees Total Budget = " + totalBuget)
+            console.log(chalk.greenBright.bold(`==================================`));
             console.log('\n')
+
             runPromt();
         })
     })
