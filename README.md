@@ -79,7 +79,7 @@
 
    * ![mysqlemployee-tracker](./Images/EByRoles&AllManagers.png)
    
-   * ![mysqlemployee-tracker](./Images/AllDepart&AllbyEDepart.png)
+   * ![mysqlemployee-tracker](./Images/AllDepart&AllEbyDepart.png)
 
 
    ## Usage Instructions
