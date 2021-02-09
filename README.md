@@ -61,13 +61,13 @@
    * you can run by node index.js to mysqlemployee-tracker.
 
    # screenshot Images
-   * ![mysqlemployee-tracker](./Images/ETracker.png)
+   * ![mysqlemployee-tracker](./Images/AllETracker.png)
 
-   * ![mysqlemployee-tracker](./Images/ERole.png)
+   <!-- * ![mysqlemployee-tracker](./Images/ERole.png) -->
 
-   * ![mysqlemployee-tracker](./Images/ERole&AllManagers.png)
+   * ![mysqlemployee-tracker](./Images/EByRoles&AllManagers.png)
    
-   * ![mysqlemployee-tracker](./Images/EDepartment.png)
+   * ![mysqlemployee-tracker](./Images/AllDepart&AllbyEDepart.png)
 
 
    ## Usage Instructions
@@ -120,7 +120,7 @@
   
    ### Click the  links to wach video 1 and video 2 demonstration:  
 
-   * [Watch the video 1 ](https://drive.google.com/file/d/13Ek5_a2yhRKBvolLvIwGzpphwaK5C_RB/view?usp=sharing)
+   * [Watch the video 1 ](https://drive.google.com/file/d/1n67AuDdYe4XNGFX4q0A5VfpPEFfHYZFF/view?usp=sharing)
   
    * [Watch the video 2](https://drive.google.com/file/d/1QeEtYFUPniLX8ZqN8y_NJk6BcEOSqoMB/view?usp=sharing)
     
