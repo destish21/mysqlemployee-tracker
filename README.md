@@ -75,9 +75,9 @@
    * you can run by node index.js to mysqlemployee-tracker.
 
    # screenshot Images
-   * ![mysqlemployee-tracker](./Images/AllETracker.png)
+   * ![mysqlemployee-tracker](./Images/allETracker.png)
 
-   * ![mysqlemployee-tracker](./Images/EByRoles&AllManagers.png)
+   * ![mysqlemployee-tracker](./Images/EByRoles&Allmanagers.png)
    
    * ![mysqlemployee-tracker](./Images/AllDepart&AllEbyDepart.png)
 
