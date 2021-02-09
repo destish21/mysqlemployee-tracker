@@ -81,7 +81,6 @@
    
    * ![mysqlemployee-tracker](./Images/AllDepart&AllEbyDepart.png)
 
-
    ## Usage Instructions
 
    * For this app to run make sure first 
