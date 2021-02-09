@@ -1,4 +1,4 @@
-# mysqlemployee-tracker
+# MySqlEmployee-Tracker
 
 
 ## License
@@ -24,7 +24,21 @@
    # Description
 
    * This application is developed to help for non-developers to view and interact with information stored in databases. project managers,even to every body  that can be used to write clearly and briefly, save, and delete datase.
-   * This application uses an express backend and save and retrieve node data from a mysql. .
+   * This application uses an express backend and save and retrieve node data from a mysql. 
+   * I included in package.js as dependence
+
+   * npm init
+
+   * npm install inquirer
+
+   * npm install mysql
+
+   * npm install console.table
+
+   * npm install figlet
+
+   * npm install chalk
+
 
    * Non Developers or users can quickly and easily can manege their employees as well as
 
@@ -62,8 +76,6 @@
 
    # screenshot Images
    * ![mysqlemployee-tracker](./Images/AllETracker.png)
-
-   <!-- * ![mysqlemployee-tracker](./Images/ERole.png) -->
 
    * ![mysqlemployee-tracker](./Images/EByRoles&AllManagers.png)
    
@@ -120,11 +132,8 @@
   
    ### Click the  links to wach video 1 and video 2 demonstration:  
 
-   * [Watch the video 1 ](https://drive.google.com/file/d/1n67AuDdYe4XNGFX4q0A5VfpPEFfHYZFF/view?usp=sharing)
+   * [Watch the video ](https://drive.google.com/file/d/1rgVSVhG-DRQTNpzqhZfX6vCmG51VK1-P/view?usp=sharing)
   
-   * [Watch the video 2](https://drive.google.com/file/d/1QeEtYFUPniLX8ZqN8y_NJk6BcEOSqoMB/view?usp=sharing)
-    
-
    ## Contribution
   
    * This is Contributed by [destish21/mysqlemployee-tracker](https://github.com/destish21/mysqlemployee-tracker). 
