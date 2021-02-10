@@ -24,8 +24,9 @@ connection.connect(err => {
     console.log(``);
     console.log(chalk.yellow.bold(`===============================================================================================================`));
     console.log(`connected to mysql on thread${connection.threadId}`)
-    runPromt()
+    runPrompt()
 });
+
 // All options easy to modify 
 const options = [
     "View All employees?",
@@ -42,7 +43,7 @@ const options = [
     "Exit"
 ]
 
-const runPromt = () => {
+const runPrompt = () => {
     inquirer.prompt([
         {
             name: "choice",
@@ -98,7 +99,7 @@ const runPromt = () => {
                 break;
 
             case "Exit":
-                exitTracker();
+            exitTracker();
 
         }
     })
@@ -112,20 +113,24 @@ const viewAllemployees = () => {
         console.log(chalk.yellow.bold(`===============================================================================================`));
         console.table(res);
         console.log(chalk.yellow.bold(`==============================================================================================`));
-        runPromt();
+        runPrompt();
     })
 }
 
-//case 2 View All Employee's By Roles?
-const viewAllRoles = () => {
-    var query = "SELECT employeeT.first_name, employeeT.last_name, role.title AS Title FROM employeeT JOIN role ON employeeT.role_id = role.id;";
+// //case 2 View All Employees By Roles?
+const viewAllRoles =()=> {
+    const query = `SELECT employeeT.first_name, employeeT.last_name,  role.title,  employeeT.id,  '' , department.name  AS department
+    FROM employeeT
+    LEFT JOIN role ON (role.id = employeeT.role_id)
+    LEFT JOIN department ON (department.id = role.department_id)
+    ORDER BY role.title;`;
     connection.query(query, (err, res) => {
         if (err) throw err;
-        console.log(chalk.yellow.bold(`==========================================================`));
+                console.log(chalk.yellow.bold(`===================================================================`));
         console.table(res);
-        console.log(chalk.yellow.bold(`=================================================`));
-        runPromt();
-    })
+                console.log(chalk.yellow.bold(`====================================================================`));
+        runPrompt();
+    });
 }
 
 //case 3 View All Managers?
@@ -135,7 +140,7 @@ const viewAllManagers = () => {
         console.log(chalk.yellow.bold(`===============================================`));
         console.table(res);
         console.log(chalk.yellow.bold(`==============================================`));
-        runPromt();
+        runPrompt();
 
     })
 }
@@ -146,22 +151,24 @@ const viewAllDepartment = () => {
         console.log(chalk.yellow.bold(`==================================================`));
         console.table(res);
         console.log(chalk.yellow.bold(`====================`));
-        runPromt();
+        runPrompt();
 
     })
 }
-
 //cas 4.2 View all Emplyees By Deparments
 const viewEByDepartments = () => {
-    var query = "SELECT employeeT.first_name, employeeT.last_name, department.name AS Department FROM employeeT JOIN role ON employeeT.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employeeT.id;";
-    connection.query(query,
-        (err, res) => {
-            if (err) throw err;
-            console.log(chalk.yellow.bold(`==============================================================`));
-            console.table(res);
-            console.log(chalk.yellow.bold(`===========================================================`));
-            runPromt();
-        })
+    const query = `SELECT department.name AS department, role.title, employeeT.id, employeeT.first_name, employeeT.last_name
+    FROM employeeT
+    LEFT JOIN role ON (role.id = employeeT.role_id)
+    LEFT JOIN department ON (department.id = role.department_id)
+    ORDER BY department.name;`;
+    connection.query(query, (err, res) => {
+        if (err) throw err;
+        console.log(chalk.yellow.bold(`================================================================`));
+        console.table(res);
+        console.log(chalk.yellow.bold(`================================================================`));
+        runPrompt();
+    });
 }
 
 //case 5 Add Employee?
@@ -205,7 +212,7 @@ const AddEmployee = () => {
                 console.log(chalk.yellow.bold(`=========================================`));
                 console.table(val);
                 console.log(chalk.yellow.bold(`=========================================`));
-                runPromt();
+                runPrompt();
             })
     })
 }
@@ -288,7 +295,7 @@ const updateEmployeeRole = () => {
                         if (err3) throw err3;
                         console.log(`${resName.employeeName}'s role is updated to ${resRole.titleRole}.`);
                         console.log(chalk.yellow.bold(`=========================================`));
-                        runPromt();
+                        runPrompt();
                     })
                 })
             })
@@ -322,7 +329,7 @@ const AddRole = () => {
                     console.log(chalk.yellow.bold(`=========================================`));
                     console.table(res);
                     console.log(chalk.yellow.bold(`=========================================`));
-                    runPromt();
+                    runPrompt();
                 }
             )
         });
@@ -347,12 +354,11 @@ const AddDepartment = () => {
                 console.log(chalk.yellow.bold(`========================`));
                 console.table(res);
                 console.log(chalk.yellow.bold(`=========================`));
-                runPromt();
+                runPrompt();
             }
         )
     })
 }
-
 
 //case 10 removing employee
 const removedEmployee = () => {
@@ -374,11 +380,10 @@ const removedEmployee = () => {
             connection.query("DELETE FROM employeeT WHERE first_name= ?", answer.employeeName)
             console.log("\n" + answer.employeeName + " is successfuly removed!\n")
             console.log(chalk.red.bold(`======================================`));
-            runPromt();
+            runPrompt();
 
         })
     })
-
 }
 
 //case 11 employee budget
@@ -390,7 +395,7 @@ const EmployeeBudget = () => {
             message: "Do you want to know employee budget? (y/n)"
         }
     ).then(yes => {
-        if (!yes.budget) return runPromt();
+        if (!yes.budget) return runPrompt();
         ;
         console.log('\nCompany Employee and theier salary')
         console.log(chalk.green.bold('-----------------------------------'));
@@ -415,10 +420,11 @@ const EmployeeBudget = () => {
             console.log(chalk.greenBright.bold(`==================================`));
             console.log('\n')
 
-            runPromt();
+            runPrompt();
         })
     })
 }
+
 const exitTracker = () => {
     connection.end();
 }
